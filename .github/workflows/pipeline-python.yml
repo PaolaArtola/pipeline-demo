@@ -1,0 +1,22 @@
+name: Pipeline CI/CD Python
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+      - name: Verificar sintaxis del código
+        run: python -m py_compile src/conversor.py
+      - name: Ejecutar pruebas
+        run: pytest tests/ -v
+      - name: Despliegue simulado
+        run: |
+          mkdir -p staging
+          cp -r src/* staging/
+          echo 'Despliegue exitoso'
